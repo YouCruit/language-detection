@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cybozu.labs</groupId>
   <artifactId>langdetect</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <description>POM was created by Sonatype Nexus</description>
   <dependencies>
     <dependency>
