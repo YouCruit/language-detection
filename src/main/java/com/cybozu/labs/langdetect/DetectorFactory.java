@@ -62,7 +62,6 @@ public class DetectorFactory {
 
     public static void loadProfileFromClassPath() throws LangDetectException, URISyntaxException, IOException {
         URI profilesURI = DetectorFactory.class.getClassLoader().getResource("profiles/").toURI();
-        System.out.println(profilesURI);
         FileSystem fileSystem = FileSystems.newFileSystem(profilesURI,
                 new HashMap<String, Object>());
         DirectoryStream ds = Files.newDirectoryStream(fileSystem.getPath("profiles/"));
@@ -71,28 +70,14 @@ public class DetectorFactory {
         while (iter.hasNext()) {
             String path = iter.next().toString().replaceFirst("/","");
             InputStream stream = DetectorFactory.class.getClassLoader().getResourceAsStream(path);
-            if (stream != null) {
-                profiles.put(path, JSON.decode(stream, LangProfile.class));
-            } else {
-                System.out.println("Empty stream in" + path);
-            }
+            profiles.put(path, JSON.decode(stream, LangProfile.class));
         }
         ds.close();
         int langsize = profiles.size(), index = 0;
         for (String path : profiles.keySet()) {
-            //try {
             LangProfile profile = profiles.get(path);
             addProfile(profile, index, langsize);
             ++index;
-            //} //catch (JSONException e) {
-            //  throw new LangDetectException(ErrorCode.FormatError, "profile format error in '" + path + "'");
-            //} //catch (IOException e) {
-            //throw new LangDetectException(ErrorCode.FileLoadError, "can't open '" +path + "'");
-            //}
-            // finally {
-            //try {
-            //if (stream!=null) stream.close();
-            //} catch (IOException e) {}
         }
     }
 
