@@ -1,1 +1,8 @@
+.DS_Store
+.idea
+langdetect.iml
+langdetect.ipr
+langdetect.iws
+**/.DS_Store
+*/.idea/
 target

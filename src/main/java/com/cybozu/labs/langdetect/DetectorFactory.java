@@ -3,10 +3,11 @@ package com.cybozu.labs.langdetect;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.util.*;
 
 import net.arnx.jsonic.JSON;
 import net.arnx.jsonic.JSONException;
@@ -55,6 +56,38 @@ public class DetectorFactory {
         loadProfile(new File(profileDirectory));
     }
 
+
+    public static void loadProfileFromClassPath() throws LangDetectException, URISyntaxException, IOException{
+        FileSystem fileSystem = FileSystems.newFileSystem(DetectorFactory.class.getClassLoader().getResource("/").toURI(),
+                new HashMap<String, Object>());
+        DirectoryStream ds = Files.newDirectoryStream(fileSystem.getPath("/profiles"));
+        Iterator<Path> iter = ds.iterator();
+        Map<String, InputStream> streams = new HashMap<String, InputStream>();
+        while (iter.hasNext()){
+            String path = iter.next().toString();
+            streams.put(path,DetectorFactory.class.getClassLoader().getResourceAsStream(iter.next().toString()));
+        }
+        int langsize = streams.size(), index = 0;
+        for(String path:streams.keySet()){
+            InputStream stream = streams.get(path);
+            try {
+                LangProfile profile = JSON.decode(stream, LangProfile.class);
+                addProfile(profile, index, langsize);
+                ++index;
+            } catch (JSONException e) {
+                throw new LangDetectException(ErrorCode.FormatError, "profile format error in '" + path + "'");
+            } catch (IOException e) {
+                throw new LangDetectException(ErrorCode.FileLoadError, "can't open '" +path + "'");
+            } finally {
+                try {
+                    if (stream!=null) stream.close();
+                } catch (IOException e) {}
+            }
+        }
+    }
+
+
+
     /**
      * Load profiles from specified directory.
      * This method must be called once before language detection.
@@ -93,7 +126,7 @@ public class DetectorFactory {
      * Load profiles from specified directory.
      * This method must be called once before language detection.
      *  
-     * @param profileDirectory profile directory path
+     * @param //profileDirectory profile directory path
      * @throws LangDetectException  Can't open profiles(error code = {@link ErrorCode#FileLoadError})
      *                              or profile's format is wrong (error code = {@link ErrorCode#FormatError})
      */
