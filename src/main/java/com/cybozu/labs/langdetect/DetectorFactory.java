@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.*;
 import java.util.*;
 
@@ -38,53 +39,64 @@ public class DetectorFactory {
     public HashMap<String, double[]> wordLangProbMap;
     public ArrayList<String> langlist;
     public Long seed = null;
+
     private DetectorFactory() {
         wordLangProbMap = new HashMap<String, double[]>();
         langlist = new ArrayList<String>();
     }
+
     static private DetectorFactory instance_ = new DetectorFactory();
 
     /**
      * Load profiles from specified directory.
      * This method must be called once before language detection.
-     *  
+     *
      * @param profileDirectory profile directory path
-     * @throws LangDetectException  Can't open profiles(error code = {@link ErrorCode#FileLoadError})
-     *                              or profile's format is wrong (error code = {@link ErrorCode#FormatError})
+     * @throws LangDetectException Can't open profiles(error code = {@link ErrorCode#FileLoadError})
+     *                             or profile's format is wrong (error code = {@link ErrorCode#FormatError})
      */
     public static void loadProfile(String profileDirectory) throws LangDetectException {
         loadProfile(new File(profileDirectory));
     }
 
 
-    public static void loadProfileFromClassPath() throws LangDetectException, URISyntaxException, IOException{
-        FileSystem fileSystem = FileSystems.newFileSystem(DetectorFactory.class.getClassLoader().getResource("/").toURI(),
+    public static void loadProfileFromClassPath() throws LangDetectException, URISyntaxException, IOException {
+        URI profilesURI = DetectorFactory.class.getClassLoader().getResource("profiles/").toURI();
+        System.out.println(profilesURI);
+        FileSystem fileSystem = FileSystems.newFileSystem(profilesURI,
                 new HashMap<String, Object>());
-        DirectoryStream ds = Files.newDirectoryStream(fileSystem.getPath("/profiles"));
+        DirectoryStream ds = Files.newDirectoryStream(fileSystem.getPath("profiles/"));
         Iterator<Path> iter = ds.iterator();
-        Map<String, InputStream> streams = new HashMap<String, InputStream>();
-        while (iter.hasNext()){
-            String path = iter.next().toString();
-            streams.put(path,DetectorFactory.class.getClassLoader().getResourceAsStream(iter.next().toString()));
-        }
-        int langsize = streams.size(), index = 0;
-        for(String path:streams.keySet()){
-            InputStream stream = streams.get(path);
-            try {
-                LangProfile profile = JSON.decode(stream, LangProfile.class);
-                addProfile(profile, index, langsize);
-                ++index;
-            } catch (JSONException e) {
-                throw new LangDetectException(ErrorCode.FormatError, "profile format error in '" + path + "'");
-            } catch (IOException e) {
-                throw new LangDetectException(ErrorCode.FileLoadError, "can't open '" +path + "'");
-            } finally {
-                try {
-                    if (stream!=null) stream.close();
-                } catch (IOException e) {}
+        Map<String, LangProfile> profiles = new HashMap<String, LangProfile>();
+        while (iter.hasNext()) {
+            String path = iter.next().toString().replaceFirst("/","");
+            InputStream stream = DetectorFactory.class.getClassLoader().getResourceAsStream(path);
+            if (stream != null) {
+                profiles.put(path, JSON.decode(stream, LangProfile.class));
+            } else {
+                System.out.println("Empty stream in" + path);
             }
         }
+        ds.close();
+        int langsize = profiles.size(), index = 0;
+        for (String path : profiles.keySet()) {
+            //try {
+            LangProfile profile = profiles.get(path);
+            addProfile(profile, index, langsize);
+            ++index;
+            //} //catch (JSONException e) {
+            //  throw new LangDetectException(ErrorCode.FormatError, "profile format error in '" + path + "'");
+            //} //catch (IOException e) {
+            //throw new LangDetectException(ErrorCode.FileLoadError, "can't open '" +path + "'");
+            //}
+            // finally {
+            //try {
+            //if (stream!=null) stream.close();
+            //} catch (IOException e) {}
+        }
     }
+
+
 
 
 
