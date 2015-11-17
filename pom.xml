@@ -5,11 +5,38 @@
     <groupId>com.youcruit.com.cybozu.labs</groupId>
     <artifactId>langdetect</artifactId>
     <version>0.0.5-SNAPSHOT</version>
+    <name>Language Detection</name>
+    <url>https://github.com/YouCruit/language-detection</url>
+    <licenses>
+	<license>
+	    <name>The Apache Software License, Version 2.0</name>
+	    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	    <distribution>repo</distribution>
+	</license>
+    </licenses>
     <description>Language detection library implemented in pure Java</description>
     <scm>
 	<connection>scm:git:git@github.com:YouCruit/language-detection.git</connection>
 	<developerConnection>scm:git:git@github.com:YouCruit/language-detection.git</developerConnection>
+	<url>https://github.com/YouCruit/language-detection</url>
     </scm>
+    <developers>
+	<developer>
+	    <id>shuyo@github</id>
+	    <name>Nakatani Shuyo</name>
+	    <email>nakatani.shuyo@gmail.com</email>
+	</developer>
+	<developer>
+	    <id>sergey</id>
+	    <name>Sergey Zelvenskiy</name>
+	    <email>sergey@zignallabs.com</email>
+	</developer>
+	<developer>
+	    <id>tobias-@github</id>
+	    <name>Tobias Olsson</name>
+	    <email>tobias@olsson.be</email>
+	</developer>
+    </developers>
 
     <distributionManagement>
 	<repository>
