@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.youcruit.com.cybozu.labs</groupId>
     <artifactId>langdetect</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6-SNAPSHOT</version>
     <description>Language detection library implemented in pure Java</description>
     <scm>
 	<connection>scm:git:git@github.com:YouCruit/language-detection.git</connection>
 	<developerConnection>scm:git:git@github.com:YouCruit/language-detection.git</developerConnection>
-      <tag>langdetect-0.0.5</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
