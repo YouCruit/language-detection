@@ -18,7 +18,7 @@
 	<connection>scm:git:git@github.com:YouCruit/language-detection.git</connection>
 	<developerConnection>scm:git:git@github.com:YouCruit/language-detection.git</developerConnection>
 	<url>https://github.com/YouCruit/language-detection</url>
-  </scm>
+    </scm>
     <developers>
 	<developer>
 	    <id>shuyo@github</id>
