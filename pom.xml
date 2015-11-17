@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.youcruit.com.cybozu.labs</groupId>
     <artifactId>langdetect</artifactId>
-    <version>0.0.6-SNAPSHOT</version>
+    <version>1.1.2-20151117</version>
     <name>Language Detection</name>
     <url>https://github.com/YouCruit/language-detection</url>
     <licenses>
@@ -18,7 +18,8 @@
 	<connection>scm:git:git@github.com:YouCruit/language-detection.git</connection>
 	<developerConnection>scm:git:git@github.com:YouCruit/language-detection.git</developerConnection>
 	<url>https://github.com/YouCruit/language-detection</url>
-    </scm>
+      <tag>langdetect-1.1.2-20151117</tag>
+  </scm>
     <developers>
 	<developer>
 	    <id>shuyo@github</id>
