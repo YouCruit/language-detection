@@ -6,3 +6,7 @@ langdetect.iws
 **/.DS_Store
 */.idea/
 target
+.class
+.project
+*.iml
+.settings/
